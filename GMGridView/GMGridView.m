@@ -152,6 +152,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = UIViewAnimationOp
 
 @synthesize firstPositionLoaded = _firstPositionLoaded;
 @synthesize lastPositionLoaded = _lastPositionLoaded;
+@synthesize allowsToChangeContentOffset = _allowsToChangeContentOffset;
 
 //////////////////////////////////////////////////////////////
 #pragma mark Constructors and destructor
@@ -259,6 +260,7 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = UIViewAnimationOp
     
     _minPossibleContentOffset = CGPointMake(0, 0);
     _maxPossibleContentOffset = CGPointMake(0, 0);
+    _allowsToChangeContentOffset = YES;
     
     _reusableCells = [[NSMutableSet alloc] init];
     
@@ -1267,7 +1269,11 @@ static const UIViewAnimationOptions kDefaultAnimationOptions = UIViewAnimationOp
 {
     [self.layoutStrategy setupItemSize:_itemSize andItemSpacing:self.itemSpacing withMinEdgeInsets:self.minEdgeInsets andCenteredGrid:self.centerGrid];
     [self.layoutStrategy rebaseWithItemCount:_numberTotalItems insideOfBounds:self.bounds];
-    
+
+    if (self.allowsToChangeContentOffset == NO) {
+        return;
+    }
+
     CGSize contentSize = [self.layoutStrategy contentSize];
     
     _minPossibleContentOffset = CGPointMake(0, 0);
